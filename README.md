@@ -7,7 +7,7 @@ Authenticated Next.js dashboard for viewing event participants from Cockpit.
 - Better Auth in stateless mode with custom OAuth provider (`auth.hackclub.com`).
 - Server-only Cockpit API integration using `X-API-Key`.
 - Protected dashboard route with server-side session validation.
-- Participant summaries (totals, check-ins, volunteers, dietary, shirt sizes, pronouns, accommodations).
+- Participant summaries (totals, check-ins, dietary, shirt sizes, pronouns, accommodations).
 - TanStack Table for participant list with sorting + search.
 
 ## Required Environment Variables
@@ -52,4 +52,4 @@ The app redirects:
 - Cockpit API calls are made on the server only.
 - API key is never sent to the browser.
 - `/dashboard` requires authentication and server-side session validation.
-- Participants with `disabled: true` are hidden by default from the table and summaries.
+- Dashboard structure follows the current Cockpit `ParticipantsAPIResponse` shape.

@@ -6,9 +6,15 @@ import {
   ParticipantsTable,
   type ParticipantRow,
 } from "@/components/participants-table";
+import { RawDataToggle } from "@/components/raw-data-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
 import { auth } from "@/lib/auth";
-import { fetchParticipants, type Participant } from "@/lib/cockpit";
+import {
+  fetchParticipantsResponse,
+  type Event,
+  type Participant,
+  type ParticipantsResponse,
+} from "@/lib/cockpit";
 import {
   buildParticipantSummaries,
   getActiveParticipants,
@@ -52,6 +58,42 @@ function CountList({
   );
 }
 
+const EMPTY_EVENT: Event = {
+  id: "",
+  name: "",
+  displayName: "",
+  format: "",
+  city: "",
+  country: "",
+  status: "",
+  numParticipants: 0,
+  estimatedAttendeesCount: 0,
+  percentSignup: 0,
+  hasVenue: false,
+  pocName: [],
+  pocEmail: [],
+  rmName: [],
+  rmEmail: [],
+  venue: {
+    id: "",
+    venueName: "",
+    addressLine1: "",
+    addressLine2: "",
+    addressCity: "",
+    addressState: "",
+    addressCountry: "",
+    addressZip: "",
+  },
+  address: {
+    line1: "",
+    line2: "",
+    city: "",
+    state: "",
+    country: "",
+    zip: "",
+  },
+};
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -61,11 +103,15 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  let allParticipants: Participant[] = [];
+  let apiResponse: ParticipantsResponse = {
+    event: EMPTY_EVENT,
+    participants: [],
+    raw: [],
+  };
   let participantsError: string | null = null;
 
   try {
-    allParticipants = await fetchParticipants();
+    apiResponse = await fetchParticipantsResponse();
   } catch (error: unknown) {
     participantsError =
       error instanceof Error
@@ -73,24 +119,23 @@ export default async function DashboardPage() {
         : "Failed to load participants from Cockpit.";
   }
 
+  const allParticipants: Participant[] = apiResponse.participants;
+  const event = apiResponse.event;
   const participants = getActiveParticipants(allParticipants);
   const summaries = buildParticipantSummaries(allParticipants);
 
   const rows: ParticipantRow[] = participants.map((participant) => ({
-    id: participant.id,
     displayName: participant.displayName,
-    legalFirstName: participant.legalFirstName,
-    legalLastName: participant.legalLastName,
     email: participant.email,
-    phone: participant.phone,
     pronouns: participant.pronouns,
     age: participant.age,
     checkinCompleted: participant.checkinCompleted,
-    isVolunteer: participant.isVolunteer,
     shirtSize: participant.shirtSize,
     dietaryRestrictions: participant.dietaryRestrictions,
     additionalAccommodations: participant.additionalAccommodations,
-    createdTimeIso: participant.createdTime?.toISOString() ?? null,
+    emergencyContact1Name: participant.emergencyContact1Name,
+    emergencyContact1Phone: participant.emergencyContact1Phone,
+    emergencyContact1Relationship: participant.emergencyContact1Relationship,
   }));
 
   return (
@@ -101,6 +146,11 @@ export default async function DashboardPage() {
           <p className="text-sm text-zinc-500">
             Signed in as {session.user.email ?? session.user.name ?? "user"}
           </p>
+          {event.displayName || event.name ? (
+            <p className="text-sm text-zinc-500">
+              Event: {event.displayName || event.name} ({event.city}, {event.country})
+            </p>
+          ) : null}
         </div>
         <div className="flex items-center gap-2">
           <Link
@@ -119,12 +169,14 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <SummaryCard label="Total participants (active)" value={summaries.totalActive} />
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <SummaryCard label="Total participants" value={summaries.totalAll} />
         <SummaryCard label="Checked in" value={summaries.totalCheckedIn} />
-        <SummaryCard label="Volunteers" value={summaries.totalVolunteers} />
-        <SummaryCard label="Disabled hidden" value={summaries.totalDisabled} />
-        <SummaryCard label="Total returned" value={summaries.totalAll} />
+        <SummaryCard
+          label="Estimated attendees"
+          value={event.estimatedAttendeesCount}
+        />
+        <SummaryCard label="Signup %" value={Math.round(event.percentSignup)} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
@@ -151,6 +203,7 @@ export default async function DashboardPage() {
       </section>
 
       <ParticipantsTable data={rows} />
+      <RawDataToggle data={apiResponse.raw} />
     </main>
   );
 }

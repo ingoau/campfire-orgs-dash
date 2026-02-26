@@ -7,10 +7,7 @@ export interface KeyedCount {
 
 export interface ParticipantSummaries {
   totalAll: number;
-  totalActive: number;
   totalCheckedIn: number;
-  totalVolunteers: number;
-  totalDisabled: number;
   dietaryRestrictions: KeyedCount[];
   shirtSizes: KeyedCount[];
   pronouns: KeyedCount[];
@@ -20,7 +17,7 @@ export interface ParticipantSummaries {
 export function getActiveParticipants(
   participants: Participant[],
 ): Participant[] {
-  return participants.filter((participant) => !participant.disabled);
+  return participants;
 }
 
 function normalizeValue(value: string | null | undefined): string {
@@ -93,15 +90,9 @@ export function buildParticipantSummaries(
 
   return {
     totalAll: allParticipants.length,
-    totalActive: activeParticipants.length,
     totalCheckedIn: activeParticipants.filter(
       (participant) => participant.checkinCompleted,
     ).length,
-    totalVolunteers: activeParticipants.filter(
-      (participant) => participant.isVolunteer,
-    ).length,
-    totalDisabled: allParticipants.filter((participant) => participant.disabled)
-      .length,
     dietaryRestrictions: dietaryCounts,
     shirtSizes: shirtSizeCounts,
     pronouns: pronounCounts,

@@ -12,33 +12,17 @@ import {
 } from "@tanstack/react-table";
 
 export interface ParticipantRow {
-  id: string;
   displayName: string;
-  legalFirstName: string;
-  legalLastName: string;
   email: string;
-  phone: string;
   pronouns: string;
-  age: number | null;
+  age: number;
   checkinCompleted: boolean;
-  isVolunteer: boolean;
   shirtSize: string;
   dietaryRestrictions: string;
   additionalAccommodations: string;
-  createdTimeIso: string | null;
-}
-
-function formatDate(iso: string | null): string {
-  if (!iso) {
-    return "-";
-  }
-
-  const date = new Date(iso);
-  if (Number.isNaN(date.valueOf())) {
-    return "-";
-  }
-
-  return date.toLocaleString();
+  emergencyContact1Name: string;
+  emergencyContact1Phone: string;
+  emergencyContact1Relationship: string;
 }
 
 function formatFlag(value: boolean): string {
@@ -52,7 +36,7 @@ function displayOrDash(value: string): string {
 
 export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "createdTimeIso", desc: true },
+    { id: "displayName", desc: false },
   ]);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -64,26 +48,14 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         cell: ({ row }) => displayOrDash(row.original.displayName),
       },
       {
-        id: "legalName",
-        header: "Legal Name",
-        accessorFn: (row) =>
-          `${row.legalFirstName} ${row.legalLastName}`.trim() || "-",
-      },
-      {
         accessorKey: "email",
         header: "Email",
         cell: ({ row }) => displayOrDash(row.original.email),
       },
       {
-        accessorKey: "phone",
-        header: "Phone",
-        cell: ({ row }) => displayOrDash(row.original.phone),
-      },
-      {
         accessorKey: "age",
         header: "Age",
-        cell: ({ row }) =>
-          row.original.age === null ? "-" : String(row.original.age),
+        cell: ({ row }) => String(row.original.age),
       },
       {
         accessorKey: "pronouns",
@@ -94,11 +66,6 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         accessorKey: "checkinCompleted",
         header: "Checked In",
         cell: ({ row }) => formatFlag(row.original.checkinCompleted),
-      },
-      {
-        accessorKey: "isVolunteer",
-        header: "Volunteer",
-        cell: ({ row }) => formatFlag(row.original.isVolunteer),
       },
       {
         accessorKey: "shirtSize",
@@ -116,9 +83,18 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         cell: ({ row }) => displayOrDash(row.original.additionalAccommodations),
       },
       {
-        accessorKey: "createdTimeIso",
-        header: "Created",
-        cell: ({ row }) => formatDate(row.original.createdTimeIso),
+        id: "emergencyContact1",
+        header: "Emergency Contact 1",
+        accessorFn: (row) =>
+          [row.emergencyContact1Name, row.emergencyContact1Relationship]
+            .filter((value) => value.trim().length > 0)
+            .join(" - "),
+        cell: ({ row }) =>
+          [
+            displayOrDash(row.original.emergencyContact1Name),
+            displayOrDash(row.original.emergencyContact1Phone),
+            displayOrDash(row.original.emergencyContact1Relationship),
+          ].join(" / "),
       },
     ],
     [],
