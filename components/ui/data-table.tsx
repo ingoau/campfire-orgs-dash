@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown, Search, X } from "lucide-react"
 import {
   type ColumnDef,
   type SortingState,
@@ -63,19 +63,43 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
   })
 
+  const rowCount = table.getRowModel().rows.length
+
   return (
-    <section className="space-y-3 rounded-lg border p-4">
-      <div className="flex items-center justify-between gap-4">
-        {title ? <h2 className="text-lg font-semibold">{title}</h2> : <div />}
-        <Input
-          value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          placeholder={filterPlaceholder}
-          className="w-full max-w-sm"
-        />
+    <section className="space-y-3 rounded-xl border bg-card p-4 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-0.5">
+          {title ? <h2 className="text-lg font-semibold">{title}</h2> : null}
+          <p className="text-sm text-muted-foreground">
+            Showing <span className="font-semibold tabular-nums">{rowCount}</span> result
+            {rowCount === 1 ? "" : "s"}
+          </p>
+        </div>
+        <div className="flex w-full max-w-md items-center gap-2">
+          <div className="relative w-full">
+            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={globalFilter}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              placeholder={filterPlaceholder}
+              className="pl-9"
+            />
+          </div>
+          {globalFilter ? (
+            <Button
+              type="button"
+              size="icon-sm"
+              variant="outline"
+              onClick={() => setGlobalFilter("")}
+              aria-label="Clear search"
+            >
+              <X className="size-4" />
+            </Button>
+          ) : null}
+        </div>
       </div>
-      <Table>
-        <TableHeader>
+      <Table className="min-w-[900px]">
+        <TableHeader className="sticky top-0 z-10 bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -114,7 +138,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className=""
+                className="odd:bg-muted/20"
               >
                 {row.getVisibleCells().map((cell) => {
                   const columnMeta = cell.column.columnDef.meta as DataTableColumnMeta | undefined
@@ -131,7 +155,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))
           ) : (
-            <TableRow className="">
+            <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 {emptyMessage}
               </TableCell>

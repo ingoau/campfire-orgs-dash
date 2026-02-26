@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Filter, X } from "lucide-react";
 
 import { ParticipantsTable, type ParticipantRow } from "@/components/participants-table";
 import { Button } from "@/components/ui/button";
@@ -96,9 +97,9 @@ function SummaryCard({
 }) {
   if (!onClick) {
     return (
-      <article className="rounded-lg border p-4">
-        <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
-        <p className="mt-2 text-2xl font-semibold">{value}</p>
+      <article className="rounded-xl border bg-card p-4 shadow-xs">
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>
       </article>
     );
   }
@@ -108,13 +109,14 @@ function SummaryCard({
       type="button"
       variant="outline"
       onClick={onClick}
-      className={`h-auto w-full flex-col items-start justify-start rounded-lg px-4 py-4 text-left shadow-none transition-colors ${isActive
-        ? "border-zinc-800 bg-zinc-100 hover:bg-zinc-100 dark:border-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-900"
-        : "hover:border-zinc-400 dark:hover:border-zinc-500"
+      aria-pressed={isActive}
+      className={`h-auto w-full flex-col items-start justify-start rounded-xl px-4 py-4 text-left shadow-xs transition-colors ${isActive
+        ? "border-primary/50 bg-primary/10 hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/15 dark:hover:bg-primary/15"
+        : "hover:border-muted-foreground/40"
         }`}
     >
-      <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold">{value}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>
     </Button>
   );
 }
@@ -134,12 +136,17 @@ function CountList({
   activeFilter: DashboardFilter | null;
   setActiveFilter: (filter: DashboardFilter | null) => void;
 }) {
+  const sortedValues = useMemo(
+    () => [...values].sort((first, second) => second.count - first.count),
+    [values],
+  );
+
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-xl border bg-card p-4 shadow-xs">
       <h2 className="text-base font-semibold">{title}</h2>
-      {values.length > 0 ? (
-        <ul className="mt-3 space-y-2 text-sm">
-          {values.map((item) => {
+      {sortedValues.length > 0 ? (
+        <ul className="mt-3 max-h-64 space-y-2 overflow-auto pr-1 text-sm">
+          {sortedValues.map((item) => {
             const isActive =
               activeFilter?.kind === filterKind &&
               "value" in activeFilter &&
@@ -156,12 +163,12 @@ function CountList({
                     )
                   }
                   className={`flex w-full justify-between gap-3 rounded-md px-2 py-1 text-left transition-colors ${isActive
-                      ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
-                      : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                      ? "bg-primary/10 text-foreground"
+                      : "hover:bg-muted/60"
                     }`}
                 >
-                  <span className="text-zinc-600 dark:text-zinc-300">{item.label}</span>
-                  <span className="font-medium">{item.count}</span>
+                  <span className="text-muted-foreground">{item.label}</span>
+                  <span className="font-semibold tabular-nums">{item.count}</span>
                 </button>
               </li>
             );
@@ -192,7 +199,7 @@ export function DashboardFilteredTable({
   );
 
   return (
-    <>
+    <div className="space-y-4">
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           label="Total participants"
@@ -260,23 +267,35 @@ export function DashboardFilteredTable({
         />
       </section>
 
-      {activeFilter ? (
-        <section className="flex flex-wrap items-center gap-2 rounded-md border px-3 py-2 text-sm">
-          <span>
-            Table filter: <strong>{getFilterLabel(activeFilter)}</strong>
+      <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-3 py-2.5 text-sm shadow-xs">
+        {activeFilter ? (
+          <div className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-foreground">
+              <Filter className="size-3" />
+              {getFilterLabel(activeFilter)}
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              className="h-7"
+              onClick={() => setActiveFilter(null)}
+            >
+              <X className="size-3.5" />
+              Clear
+            </Button>
+          </div>
+        ) : (
+          <span className="text-muted-foreground">
+            Select a summary card or category value to focus the table.
           </span>
-          <Button
-            type="button"
-            variant="link"
-            className="h-auto px-0 py-0"
-            onClick={() => setActiveFilter(null)}
-          >
-            Clear filter
-          </Button>
-        </section>
-      ) : null}
+        )}
+        <span className="font-medium tabular-nums text-muted-foreground">
+          Showing {filteredRows.length} of {rows.length}
+        </span>
+      </section>
 
       <ParticipantsTable data={filteredRows} />
-    </>
+    </div>
   );
 }

@@ -50,7 +50,21 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
       {
         accessorKey: "email",
         header: "Email",
-        cell: ({ row }) => displayOrDash(row.original.email),
+        cell: ({ row }) => {
+          const email = row.original.email.trim();
+          if (!email) {
+            return "-";
+          }
+
+          return (
+            <a
+              href={`mailto:${email}`}
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              {email}
+            </a>
+          );
+        },
       },
       {
         accessorKey: "age",
@@ -84,12 +98,20 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
           [row.emergencyContact1Name, row.emergencyContact1Relationship]
             .filter((value) => value.trim().length > 0)
             .join(" - "),
-        cell: ({ row }) =>
-          [
-            displayOrDash(row.original.emergencyContact1Name),
-            displayOrDash(row.original.emergencyContact1Phone),
-            displayOrDash(row.original.emergencyContact1Relationship),
-          ].join(" / "),
+        cell: ({ row }) => {
+          const name = displayOrDash(row.original.emergencyContact1Name);
+          const phone = displayOrDash(row.original.emergencyContact1Phone);
+          const relationship = displayOrDash(row.original.emergencyContact1Relationship);
+
+          return (
+            <div className="space-y-0.5">
+              <p>{name}</p>
+              <p className="text-muted-foreground">
+                {phone} - {relationship}
+              </p>
+            </div>
+          );
+        },
       },
     ],
     [],

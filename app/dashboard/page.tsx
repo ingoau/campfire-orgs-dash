@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AlertTriangle, CalendarDays, Mail, RefreshCw } from "lucide-react";
 
 import { DashboardFilteredTable } from "@/components/dashboard-filtered-table";
 import { type ParticipantRow } from "@/components/participants-table";
@@ -96,40 +97,60 @@ export default async function DashboardPage() {
     emergencyContact1Relationship: participant.emergencyContact1Relationship,
   }));
 
+  const eventName = event.displayName || event.name;
+
   return (
-    <main className="mx-auto w-full max-w-[1400px] space-y-6 p-6">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Participants Dashboard</h1>
-          <p className="text-sm text-zinc-500">
-            Signed in as {session.user.email ?? session.user.name ?? "user"}
-          </p>
-          {event.displayName || event.name ? (
-            <p className="text-sm text-zinc-500">
-              Event: {event.displayName || event.name} ({event.city}, {event.country})
-            </p>
-          ) : null}
-        </div>
-        <div className="flex items-center gap-2">
-          <ModeToggle />
-          <Button asChild variant="outline" size="sm">
-            <Link href="/dashboard">Refresh</Link>
-          </Button>
-          <SignOutButton />
+    <main className="mx-auto w-full max-w-[1400px] space-y-6 px-4 py-6 sm:px-6 lg:py-8">
+      <header className="supports-backdrop-filter:bg-card/60 rounded-xl border bg-card/70 p-5 shadow-xs backdrop-blur">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
+              Participants Dashboard
+            </h1>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <Mail className="size-3.5" />
+                {session.user.email ?? session.user.name ?? "user"}
+              </span>
+              {eventName ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarDays className="size-3.5" />
+                  {eventName}
+                  {event.city && event.country ? ` (${event.city}, ${event.country})` : ""}
+                </span>
+              ) : null}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <Button asChild variant="outline" size="sm">
+              <Link href="/dashboard" className="inline-flex items-center gap-1.5">
+                <RefreshCw className="size-3.5" />
+                Refresh
+              </Link>
+            </Button>
+            <SignOutButton />
+          </div>
         </div>
       </header>
 
       {participantsError ? (
         <section className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
-          {participantsError}
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+            <span>{participantsError}</span>
+          </div>
         </section>
       ) : null}
 
-      <DashboardFilteredTable
-        summaries={summaries}
-        estimatedAttendeesCount={event.estimatedAttendeesCount}
-        rows={rows}
-      />
+      <section className="space-y-4">
+        <DashboardFilteredTable
+          summaries={summaries}
+          estimatedAttendeesCount={event.estimatedAttendeesCount}
+          rows={rows}
+        />
+      </section>
+
       <RawDataToggle data={apiResponse.raw} />
     </main>
   );

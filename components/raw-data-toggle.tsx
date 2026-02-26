@@ -9,9 +9,9 @@ export function RawDataToggle({ data }: { data: unknown }) {
   const prettyData = useMemo(() => JSON.stringify(data, null, 2), [data]);
 
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-xl border border-dashed bg-card/40 p-4">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-base font-semibold">Testing: Raw API Data</h2>
+        <h2 className="text-sm font-medium text-muted-foreground">Developer: Raw API Data</h2>
         <Button
           type="button"
           variant="outline"
@@ -22,7 +22,7 @@ export function RawDataToggle({ data }: { data: unknown }) {
         </Button>
       </div>
       {open ? (
-        <pre className="mt-3 max-h-96 overflow-auto rounded-md bg-zinc-100 p-3 text-xs dark:bg-zinc-900">
+        <pre className="mt-3 max-h-96 overflow-auto rounded-md bg-muted p-3 text-xs">
           {prettyData}
         </pre>
       ) : null}
