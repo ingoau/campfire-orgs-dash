@@ -143,7 +143,6 @@ export default async function DashboardPage() {
       <section className="space-y-4">
         <DashboardFilteredTable
           summaries={summaries}
-          estimatedAttendeesCount={event.estimatedAttendeesCount}
           rows={rows}
         />
       </section>

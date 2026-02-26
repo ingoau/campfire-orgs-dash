@@ -154,8 +154,8 @@ function CountList({
                     )
                   }
                   className={`flex w-full justify-between gap-3 rounded-md px-2 py-1 text-left transition-colors ${isActive
-                      ? "bg-primary/10 text-foreground"
-                      : "hover:bg-muted/60"
+                    ? "bg-primary/10 text-foreground"
+                    : "hover:bg-muted/60"
                     }`}
                 >
                   <span className="text-muted-foreground">{item.label}</span>
@@ -174,11 +174,9 @@ function CountList({
 
 export function DashboardFilteredTable({
   summaries,
-  estimatedAttendeesCount,
   rows,
 }: {
   summaries: ParticipantSummaries;
-  estimatedAttendeesCount: number;
   rows: ParticipantRow[];
 }) {
   const [activeFilter, setActiveFilter] = useState<DashboardFilter | null>(null);
@@ -191,7 +189,7 @@ export function DashboardFilteredTable({
 
   return (
     <div className="space-y-4">
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
           label="Total participants"
           value={summaries.totalAll}
@@ -217,26 +215,14 @@ export function DashboardFilteredTable({
           }
           isActive={activeFilter?.kind === "not-checked-in"}
         />
-        <SummaryCard
-          label="Estimated attendees"
-          value={estimatedAttendeesCount}
-        />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-2">
         <CountList
           title="Dietary Restrictions"
           values={summaries.dietaryRestrictions}
           emptyLabel="No dietary restrictions provided."
           filterKind="dietary"
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-        />
-        <CountList
-          title="Pronouns"
-          values={summaries.pronouns}
-          emptyLabel="No pronouns provided."
-          filterKind="pronouns"
           activeFilter={activeFilter}
           setActiveFilter={setActiveFilter}
         />
