@@ -54,6 +54,7 @@ const EMPTY_EVENT: Event = {
 };
 
 export default async function DashboardPage() {
+  const isDevelopment = process.env.NODE_ENV === "development";
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -72,10 +73,8 @@ export default async function DashboardPage() {
   try {
     apiResponse = await fetchParticipantsResponse();
   } catch (error: unknown) {
-    participantsError =
-      error instanceof Error
-        ? error.message
-        : "Failed to load participants from Cockpit.";
+    console.error("Failed to load participants from Cockpit.", error);
+    participantsError = "Failed to load participants. Please try again later.";
   }
 
   const allParticipants = apiResponse.participants;
@@ -151,7 +150,7 @@ export default async function DashboardPage() {
         />
       </section>
 
-      <RawDataToggle data={apiResponse.raw} />
+      {isDevelopment ? <RawDataToggle data={apiResponse.raw} /> : null}
     </main>
   );
 }
