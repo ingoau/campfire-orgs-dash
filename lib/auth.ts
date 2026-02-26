@@ -4,6 +4,8 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
 
+import { isEmailAllowlisted } from "@/lib/email-allowlist";
+
 const baseURL = process.env.BETTER_AUTH_URL;
 const secret = process.env.BETTER_AUTH_SECRET;
 const oauthClientId = process.env.HACKCLUB_OAUTH_CLIENT_ID;
@@ -41,6 +43,17 @@ export const auth = betterAuth({
   account: {
     storeStateStrategy: "cookie",
     storeAccountCookie: true,
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          if (!isEmailAllowlisted(user.email)) {
+            return false;
+          }
+        },
+      },
+    },
   },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",

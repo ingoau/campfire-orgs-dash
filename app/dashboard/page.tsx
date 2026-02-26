@@ -10,6 +10,7 @@ import { RawDataToggle } from "@/components/raw-data-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+import { isEmailAllowlisted } from "@/lib/email-allowlist";
 import {
   fetchParticipantsResponse,
   type Event,
@@ -61,6 +62,10 @@ export default async function DashboardPage() {
 
   if (!session) {
     redirect("/sign-in");
+  }
+
+  if (!isEmailAllowlisted(session.user.email)) {
+    redirect("/sign-in?error=not-allowed");
   }
 
   let apiResponse: ParticipantsResponse = {

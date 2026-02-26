@@ -24,6 +24,7 @@ cp .env.example .env.local
 | `BETTER_AUTH_SECRET` | yes | Strong secret for Better Auth cookie/session signing |
 | `HACKCLUB_OAUTH_CLIENT_ID` | yes | OAuth client ID from Hack Club auth provider |
 | `HACKCLUB_OAUTH_CLIENT_SECRET` | yes | OAuth client secret from Hack Club auth provider |
+| `ALLOWED_EMAILS` | yes | Comma-separated list of emails allowed to sign in and access dashboard data |
 | `COCKPIT_BASE_URL` | no | Cockpit base URL (defaults to `https://cockpit.hackclub.com`) |
 | `COCKPIT_EVENT_ID` | yes | Event ID used for participants endpoint |
 | `COCKPIT_API_KEY` | yes | Cockpit API key sent in `X-API-Key` |
@@ -52,4 +53,5 @@ The app redirects:
 - Cockpit API calls are made on the server only.
 - API key is never sent to the browser.
 - `/dashboard` requires authentication and server-side session validation.
+- `/dashboard` also requires the signed-in email to be listed in `ALLOWED_EMAILS`.
 - Dashboard structure follows the current Cockpit `ParticipantsAPIResponse` shape.
