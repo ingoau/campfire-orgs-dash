@@ -146,7 +146,7 @@ export async function fetchParticipants(): Promise<Participant[]> {
   const eventId = getEnv("COCKPIT_EVENT_ID");
   const apiKey = getEnv("COCKPIT_API_KEY");
 
-  const response = await fetch(`${baseURL}/api/events/${eventId}/participants`, {
+  const response = await fetch(`${baseURL}/api/v1/events/${eventId}/participants`, {
     headers: {
       "X-API-Key": apiKey,
       Accept: "application/json",
