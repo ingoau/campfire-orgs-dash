@@ -37,11 +37,12 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         cell: ({ row }) => (
           <div className="flex items-center gap-2 whitespace-nowrap">
             {row.original.checkinCompleted ? (
-              <Check
-                className="size-4 text-emerald-600 dark:text-emerald-400"
-                aria-label="Checked in"
-                title="Checked in"
-              />
+              <span title="Checked in" className="inline-flex">
+                <Check
+                  className="size-4 text-emerald-600 dark:text-emerald-400"
+                  aria-label="Checked in"
+                />
+              </span>
             ) : null}
             <span>{displayOrDash(row.original.displayName)}</span>
           </div>
