@@ -128,7 +128,6 @@ export default async function DashboardPage() {
       <DashboardFilteredTable
         summaries={summaries}
         estimatedAttendeesCount={event.estimatedAttendeesCount}
-        percentSignup={event.percentSignup}
         rows={rows}
       />
       <RawDataToggle data={apiResponse.raw} />

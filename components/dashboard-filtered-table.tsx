@@ -8,6 +8,7 @@ import { type KeyedCount, type ParticipantSummaries } from "@/lib/participants";
 
 type DashboardFilter =
   | { kind: "checked-in" }
+  | { kind: "not-checked-in" }
   | { kind: "dietary"; value: string }
   | { kind: "shirt-size"; value: string }
   | { kind: "pronouns"; value: string }
@@ -31,6 +32,10 @@ function rowMatchesFilter(row: ParticipantRow, filter: DashboardFilter | null): 
 
   if (filter.kind === "checked-in") {
     return row.checkinCompleted;
+  }
+
+  if (filter.kind === "not-checked-in") {
+    return !row.checkinCompleted;
   }
 
   if (filter.kind === "dietary") {
@@ -57,6 +62,10 @@ function rowMatchesFilter(row: ParticipantRow, filter: DashboardFilter | null): 
 function getFilterLabel(filter: DashboardFilter): string {
   if (filter.kind === "checked-in") {
     return "Checked in";
+  }
+
+  if (filter.kind === "not-checked-in") {
+    return "Not checked in";
   }
 
   if (filter.kind === "dietary") {
@@ -168,15 +177,14 @@ function CountList({
 export function DashboardFilteredTable({
   summaries,
   estimatedAttendeesCount,
-  percentSignup,
   rows,
 }: {
   summaries: ParticipantSummaries;
   estimatedAttendeesCount: number;
-  percentSignup: number;
   rows: ParticipantRow[];
 }) {
   const [activeFilter, setActiveFilter] = useState<DashboardFilter | null>(null);
+  const totalNotCheckedIn = Math.max(0, summaries.totalAll - summaries.totalCheckedIn);
 
   const filteredRows = useMemo(
     () => rows.filter((row) => rowMatchesFilter(row, activeFilter)),
@@ -202,10 +210,19 @@ export function DashboardFilteredTable({
           isActive={activeFilter?.kind === "checked-in"}
         />
         <SummaryCard
+          label="Not Checked In"
+          value={totalNotCheckedIn}
+          onClick={() =>
+            setActiveFilter((current) =>
+              current?.kind === "not-checked-in" ? null : { kind: "not-checked-in" },
+            )
+          }
+          isActive={activeFilter?.kind === "not-checked-in"}
+        />
+        <SummaryCard
           label="Estimated attendees"
           value={estimatedAttendeesCount}
         />
-        <SummaryCard label="Signup %" value={Math.round(percentSignup)} />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
