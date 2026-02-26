@@ -66,8 +66,8 @@ export function DataTable<TData, TValue>({
   const rowCount = table.getRowModel().rows.length
 
   return (
-    <section className="space-y-3 rounded-xl border bg-card p-4 shadow-xs">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <section className="space-y-4 rounded-xl border bg-card p-4 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-0.5">
           {title ? <h2 className="text-lg font-semibold">{title}</h2> : null}
           <p className="text-sm text-muted-foreground">

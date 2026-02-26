@@ -200,7 +200,7 @@ export function DashboardFilteredTable({
 
   return (
     <div className="space-y-4">
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           label="Total participants"
           value={summaries.totalAll}
@@ -267,7 +267,7 @@ export function DashboardFilteredTable({
         />
       </section>
 
-      <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-3 py-2.5 text-sm shadow-xs">
+      <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card px-4 py-3 text-sm shadow-xs">
         {activeFilter ? (
           <div className="inline-flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-foreground">
