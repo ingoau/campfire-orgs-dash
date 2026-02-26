@@ -1,7 +1,7 @@
 # AI Code
 This whole codebase is written with AI. Do not expect the code to be good. I have done some light security audits, and it seems good, but still be careful.
 
-# Campfire Canberra Participants Dashboard
+# Campfire orgs
 
 Authenticated Next.js dashboard for viewing event participants from Cockpit.
 
