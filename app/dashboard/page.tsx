@@ -90,7 +90,6 @@ export default async function DashboardPage() {
   const rows: ParticipantRow[] = participants.map((participant) => ({
     displayName: participant.displayName,
     pronouns: participant.pronouns,
-    age: participant.age,
     checkinCompleted: participant.checkinCompleted,
     dietaryRestrictions: participant.dietaryRestrictions,
     additionalAccommodations: participant.additionalAccommodations,

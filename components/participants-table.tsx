@@ -9,7 +9,6 @@ import { DataTable } from "@/components/ui/data-table";
 export interface ParticipantRow {
   displayName: string;
   pronouns: string;
-  age: number;
   checkinCompleted: boolean;
   dietaryRestrictions: string;
   additionalAccommodations: string;
@@ -45,11 +44,6 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
             <span>{displayOrDash(row.original.displayName)}</span>
           </div>
         ),
-      },
-      {
-        accessorKey: "age",
-        header: "Age",
-        cell: ({ row }) => String(row.original.age),
       },
       {
         accessorKey: "pronouns",
