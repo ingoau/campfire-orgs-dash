@@ -122,18 +122,5 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image: radial-gradient(
-      circle at top,
-      oklch(0.98 0.01 250 / 45%),
-      transparent 45%
-    );
-  }
-
-  .dark body {
-    background-image: radial-gradient(
-      circle at top,
-      oklch(0.26 0.02 250 / 35%),
-      transparent 45%
-    );
   }
 }
