@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "campfire-canberra-participants-dash",
+      "name": "campfire-orgs-dash",
       "dependencies": {
         "@tanstack/react-table": "^8.21.3",
         "better-auth": "^1.4.19",

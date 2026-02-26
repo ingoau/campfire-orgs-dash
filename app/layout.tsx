@@ -3,8 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Campfire Canberra Participants Dashboard",
-  description: "Authenticated dashboard for Cockpit participants.",
+  title: "Campfire Orgs Dashboard",
 };
 
 export default function RootLayout({

@@ -28,7 +28,7 @@ if (!oauthClientSecret) {
 }
 
 export const auth = betterAuth({
-  appName: "Campfire Canberra Participants Dashboard",
+  appName: "Campfire Orgs Dashboard",
   baseURL,
   secret,
   trustedOrigins: [baseURL],
