@@ -58,7 +58,7 @@ export const auth = betterAuth({
           clientSecret: oauthClientSecret,
           scopes: ["openid", "profile", "email"],
           pkce: true,
-          requireIssuerValidation: true,
+          requireIssuerValidation: false,
         },
       ],
     }),
