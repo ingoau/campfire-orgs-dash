@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
 import {
   type ColumnDef,
   type SortingState,
@@ -74,24 +74,34 @@ export function DataTable<TData, TValue>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder ? null : (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="h-8 px-2"
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      <ArrowUpDown className="size-4" />
-                    </Button>
-                  )}
-                </TableHead>
-              ))}
+              {headerGroup.headers.map((header) => {
+                const sortDirection = header.column.getIsSorted()
+
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                        {sortDirection === "asc" ? (
+                          <ArrowUp className="size-4" />
+                        ) : sortDirection === "desc" ? (
+                          <ArrowDown className="size-4" />
+                        ) : (
+                          <ArrowUpDown className="size-4" />
+                        )}
+                      </Button>
+                    )}
+                  </TableHead>
+                )
+              })}
             </TableRow>
           ))}
         </TableHeader>
