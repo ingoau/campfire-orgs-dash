@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AlertTriangle, CalendarDays, Mail, RefreshCw } from "lucide-react";
+import { AlertTriangle, CalendarDays, RefreshCw } from "lucide-react";
 
 import { DashboardFilteredTable } from "@/components/dashboard-filtered-table";
 import { type ParticipantRow } from "@/components/participants-table";
@@ -89,11 +89,9 @@ export default async function DashboardPage() {
 
   const rows: ParticipantRow[] = participants.map((participant) => ({
     displayName: participant.displayName,
-    email: participant.email,
     pronouns: participant.pronouns,
     age: participant.age,
     checkinCompleted: participant.checkinCompleted,
-    shirtSize: participant.shirtSize,
     dietaryRestrictions: participant.dietaryRestrictions,
     additionalAccommodations: participant.additionalAccommodations,
     emergencyContact1Name: participant.emergencyContact1Name,
@@ -112,10 +110,6 @@ export default async function DashboardPage() {
               Participants Dashboard
             </h1>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5">
-                <Mail className="size-3.5" />
-                {session.user.email ?? session.user.name ?? "user"}
-              </span>
               {eventName ? (
                 <span className="inline-flex items-center gap-1.5">
                   <CalendarDays className="size-3.5" />

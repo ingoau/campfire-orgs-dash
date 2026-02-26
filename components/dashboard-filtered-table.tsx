@@ -11,7 +11,6 @@ type DashboardFilter =
   | { kind: "checked-in" }
   | { kind: "not-checked-in" }
   | { kind: "dietary"; value: string }
-  | { kind: "shirt-size"; value: string }
   | { kind: "pronouns"; value: string }
   | { kind: "accommodation"; value: string };
 
@@ -46,10 +45,6 @@ function rowMatchesFilter(row: ParticipantRow, filter: DashboardFilter | null): 
     );
   }
 
-  if (filter.kind === "shirt-size") {
-    return normalizeFilterValue(row.shirtSize) === normalizeFilterValue(filter.value);
-  }
-
   if (filter.kind === "pronouns") {
     return normalizeFilterValue(row.pronouns) === normalizeFilterValue(filter.value);
   }
@@ -71,10 +66,6 @@ function getFilterLabel(filter: DashboardFilter): string {
 
   if (filter.kind === "dietary") {
     return `Dietary: ${filter.value}`;
-  }
-
-  if (filter.kind === "shirt-size") {
-    return `Shirt size: ${filter.value}`;
   }
 
   if (filter.kind === "pronouns") {
@@ -132,7 +123,7 @@ function CountList({
   title: string;
   values: KeyedCount[];
   emptyLabel: string;
-  filterKind: "dietary" | "shirt-size" | "pronouns" | "accommodation";
+  filterKind: "dietary" | "pronouns" | "accommodation";
   activeFilter: DashboardFilter | null;
   setActiveFilter: (filter: DashboardFilter | null) => void;
 }) {
@@ -232,20 +223,12 @@ export function DashboardFilteredTable({
         />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <CountList
           title="Dietary Restrictions"
           values={summaries.dietaryRestrictions}
           emptyLabel="No dietary restrictions provided."
           filterKind="dietary"
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-        />
-        <CountList
-          title="Shirt Sizes"
-          values={summaries.shirtSizes}
-          emptyLabel="No shirt sizes provided."
-          filterKind="shirt-size"
           activeFilter={activeFilter}
           setActiveFilter={setActiveFilter}
         />

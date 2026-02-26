@@ -9,7 +9,6 @@ export interface ParticipantSummaries {
   totalAll: number;
   totalCheckedIn: number;
   dietaryRestrictions: KeyedCount[];
-  shirtSizes: KeyedCount[];
   pronouns: KeyedCount[];
   accommodations: KeyedCount[];
 }
@@ -82,11 +81,6 @@ export function buildParticipantSummaries(
       tokenizeRestrictions(participant.dietaryRestrictions),
     ),
   );
-  const shirtSizeCounts = countByValues(
-    activeParticipants
-      .map((participant) => normalizeValue(participant.shirtSize))
-      .filter(Boolean),
-  );
   const pronounCounts = countByValues(
     activeParticipants
       .map((participant) => normalizeValue(participant.pronouns))
@@ -104,7 +98,6 @@ export function buildParticipantSummaries(
       (participant) => participant.checkinCompleted,
     ).length,
     dietaryRestrictions: dietaryCounts,
-    shirtSizes: shirtSizeCounts,
     pronouns: pronounCounts,
     accommodations: accommodationCounts,
   };

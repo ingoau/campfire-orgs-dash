@@ -8,11 +8,9 @@ import { DataTable } from "@/components/ui/data-table";
 
 export interface ParticipantRow {
   displayName: string;
-  email: string;
   pronouns: string;
   age: number;
   checkinCompleted: boolean;
-  shirtSize: string;
   dietaryRestrictions: string;
   additionalAccommodations: string;
   emergencyContact1Name: string;
@@ -49,25 +47,6 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         ),
       },
       {
-        accessorKey: "email",
-        header: "Email",
-        cell: ({ row }) => {
-          const email = row.original.email.trim();
-          if (!email) {
-            return "-";
-          }
-
-          return (
-            <a
-              href={`mailto:${email}`}
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              {email}
-            </a>
-          );
-        },
-      },
-      {
         accessorKey: "age",
         header: "Age",
         cell: ({ row }) => String(row.original.age),
@@ -76,11 +55,6 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         accessorKey: "pronouns",
         header: "Pronouns",
         cell: ({ row }) => displayOrDash(row.original.pronouns),
-      },
-      {
-        accessorKey: "shirtSize",
-        header: "Shirt Size",
-        cell: ({ row }) => displayOrDash(row.original.shirtSize),
       },
       {
         accessorKey: "dietaryRestrictions",
