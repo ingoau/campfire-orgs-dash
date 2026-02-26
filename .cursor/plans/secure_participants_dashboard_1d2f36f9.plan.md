@@ -4,16 +4,16 @@ overview: Build a Next.js dashboard with Better Auth (stateless, custom OAuth vi
 todos:
   - id: add-auth
     content: Set up Better Auth stateless mode with Hack Club OIDC discovery and auth route handlers
-    status: pending
+    status: completed
   - id: add-server-cockpit-client
     content: Implement server-only Cockpit participants fetcher using X-API-Key and env-based event ID
-    status: pending
+    status: completed
   - id: build-dashboard
     content: Create protected SSR dashboard with summary cards and TanStack Table
-    status: pending
+    status: completed
   - id: harden-and-doc
     content: Add proxy/auth guard patterns, env docs, and verification steps
-    status: pending
+    status: completed
 isProject: false
 ---
 

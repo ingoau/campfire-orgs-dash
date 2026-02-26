@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Campfire Canberra Participants Dashboard
 
-## Getting Started
+Authenticated Next.js dashboard for viewing event participants from Cockpit.
 
-First, run the development server:
+## Features
+
+- Better Auth in stateless mode with custom OAuth provider (`auth.hackclub.com`).
+- Server-only Cockpit API integration using `X-API-Key`.
+- Protected dashboard route with server-side session validation.
+- Participant summaries (totals, check-ins, volunteers, dietary, shirt sizes, pronouns, accommodations).
+- TanStack Table for participant list with sorting + search.
+
+## Required Environment Variables
+
+Copy `.env.example` to `.env.local` and fill all required values:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variable | Required | Description |
+| --- | --- | --- |
+| `BETTER_AUTH_URL` | yes | App base URL (for local dev use `http://localhost:3000`) |
+| `BETTER_AUTH_SECRET` | yes | Strong secret for Better Auth cookie/session signing |
+| `HACKCLUB_OAUTH_CLIENT_ID` | yes | OAuth client ID from Hack Club auth provider |
+| `HACKCLUB_OAUTH_CLIENT_SECRET` | yes | OAuth client secret from Hack Club auth provider |
+| `COCKPIT_BASE_URL` | no | Cockpit base URL (defaults to `https://cockpit.hackclub.com`) |
+| `COCKPIT_EVENT_ID` | yes | Event ID used for participants endpoint |
+| `COCKPIT_API_KEY` | yes | Cockpit API key sent in `X-API-Key` |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies:
 
-## Learn More
+```bash
+ni
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run the app:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+nr dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The app redirects:
 
-## Deploy on Vercel
+- unauthenticated users to `/sign-in`
+- authenticated users to `/dashboard`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Security Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Cockpit API calls are made on the server only.
+- API key is never sent to the browser.
+- `/dashboard` requires authentication and server-side session validation.
+- Participants with `disabled: true` are hidden by default from the table and summaries.
