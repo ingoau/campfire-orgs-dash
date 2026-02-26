@@ -40,14 +40,24 @@ function getSortedCounts(map: Map<string, number>): KeyedCount[] {
 }
 
 function countByValues(values: string[]): KeyedCount[] {
-  const counts = new Map<string, number>();
+  const counts = new Map<string, { label: string; count: number }>();
 
   for (const value of values) {
-    const current = counts.get(value) ?? 0;
-    counts.set(value, current + 1);
+    const key = value.toLocaleLowerCase();
+    const current = counts.get(key);
+    if (current) {
+      current.count += 1;
+      continue;
+    }
+
+    counts.set(key, { label: value, count: 1 });
   }
 
-  return getSortedCounts(counts);
+  return getSortedCounts(
+    new Map(
+      [...counts.values()].map(({ label, count }) => [label, count] as const),
+    ),
+  );
 }
 
 function tokenizeRestrictions(restrictions: string): string[] {
