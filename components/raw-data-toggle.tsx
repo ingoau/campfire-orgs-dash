@@ -7,13 +7,13 @@ export function RawDataToggle({ data }: { data: unknown }) {
   const prettyData = useMemo(() => JSON.stringify(data, null, 2), [data]);
 
   return (
-    <section className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+    <section className="rounded-lg border p-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-base font-semibold">Testing: Raw API Data</h2>
         <button
           type="button"
           onClick={() => setOpen((current) => !current)}
-          className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700"
+          className="rounded-md border px-3 py-1.5 text-sm"
         >
           {open ? "Hide Raw Data" : "Show Raw Data"}
         </button>

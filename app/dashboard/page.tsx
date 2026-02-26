@@ -23,7 +23,7 @@ import {
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
-    <article className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+    <article className="rounded-lg border p-4">
       <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
       <p className="mt-2 text-2xl font-semibold">{value}</p>
     </article>
@@ -40,7 +40,7 @@ function CountList({
   emptyLabel: string;
 }) {
   return (
-    <section className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+    <section className="rounded-lg border p-4">
       <h2 className="text-base font-semibold">{title}</h2>
       {values.length > 0 ? (
         <ul className="mt-3 space-y-2 text-sm">
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/dashboard"
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700"
+            className="rounded-md border px-3 py-1.5 text-sm"
           >
             Refresh
           </Link>
