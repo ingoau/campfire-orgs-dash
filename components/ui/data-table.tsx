@@ -113,7 +113,10 @@ export function DataTable<TData, TValue>({
                 className=""
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="align-top">
+                  <TableCell
+                    key={cell.id}
+                    className="max-w-xs align-top whitespace-normal wrap-break-word"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
