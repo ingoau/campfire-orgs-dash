@@ -32,6 +32,10 @@ interface DataTableProps<TData, TValue> {
   initialSort?: SortingState
 }
 
+type DataTableColumnMeta = {
+  cellClassName?: string
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -112,14 +116,18 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 className=""
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className="max-w-xs align-top whitespace-normal wrap-break-word"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const columnMeta = cell.column.columnDef.meta as DataTableColumnMeta | undefined
+
+                  return (
+                    <TableCell
+                      key={cell.id}
+                      className={`max-w-xs align-top whitespace-normal wrap-break-word ${columnMeta?.cellClassName ?? ""}`}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             ))
           ) : (

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { type ColumnDef, type SortingState } from "@tanstack/react-table";
+import { Check } from "lucide-react";
 
 import { DataTable } from "@/components/ui/data-table";
 
@@ -19,10 +20,6 @@ export interface ParticipantRow {
   emergencyContact1Relationship: string;
 }
 
-function formatFlag(value: boolean): string {
-  return value ? "Yes" : "No";
-}
-
 function displayOrDash(value: string): string {
   const normalized = value.trim();
   return normalized.length > 0 ? normalized : "-";
@@ -34,7 +31,21 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
       {
         accessorKey: "displayName",
         header: "Display Name",
-        cell: ({ row }) => displayOrDash(row.original.displayName),
+        meta: {
+          cellClassName: "max-w-none whitespace-nowrap wrap-normal",
+        },
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            {row.original.checkinCompleted ? (
+              <Check
+                className="size-4 text-emerald-600 dark:text-emerald-400"
+                aria-label="Checked in"
+                title="Checked in"
+              />
+            ) : null}
+            <span>{displayOrDash(row.original.displayName)}</span>
+          </div>
+        ),
       },
       {
         accessorKey: "email",
@@ -50,11 +61,6 @@ export function ParticipantsTable({ data }: { data: ParticipantRow[] }) {
         accessorKey: "pronouns",
         header: "Pronouns",
         cell: ({ row }) => displayOrDash(row.original.pronouns),
-      },
-      {
-        accessorKey: "checkinCompleted",
-        header: "Checked In",
-        cell: ({ row }) => formatFlag(row.original.checkinCompleted),
       },
       {
         accessorKey: "shirtSize",
