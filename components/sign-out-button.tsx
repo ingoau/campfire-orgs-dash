@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
 export function SignOutButton() {
@@ -17,13 +18,8 @@ export function SignOutButton() {
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleSignOut}
-      disabled={loading}
-      className="rounded-md border px-3 py-1.5 text-sm font-medium text-zinc-800 hover:bg-zinc-100 disabled:opacity-60 dark:text-zinc-100 dark:hover:bg-zinc-900"
-    >
+    <Button type="button" variant="outline" size="sm" onClick={handleSignOut} disabled={loading}>
       {loading ? "Signing out..." : "Sign out"}
-    </button>
+    </Button>
   );
 }

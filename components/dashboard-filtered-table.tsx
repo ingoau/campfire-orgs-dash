@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { ParticipantsTable, type ParticipantRow } from "@/components/participants-table";
+import { Button } from "@/components/ui/button";
 import { type KeyedCount, type ParticipantSummaries } from "@/lib/participants";
 
 type DashboardFilter =
@@ -94,18 +95,18 @@ function SummaryCard({
   }
 
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
       onClick={onClick}
-      className={`rounded-lg border p-4 text-left transition-colors ${
-        isActive
-          ? "border-zinc-800 bg-zinc-100 dark:border-zinc-200 dark:bg-zinc-900"
-          : "hover:border-zinc-400 dark:hover:border-zinc-500"
-      }`}
+      className={`h-auto w-full flex-col items-start justify-start rounded-lg px-4 py-4 text-left shadow-none transition-colors ${isActive
+        ? "border-zinc-800 bg-zinc-100 hover:bg-zinc-100 dark:border-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-900"
+        : "hover:border-zinc-400 dark:hover:border-zinc-500"
+        }`}
     >
       <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
       <p className="mt-2 text-2xl font-semibold">{value}</p>
-    </button>
+    </Button>
   );
 }
 
@@ -134,7 +135,7 @@ function CountList({
               activeFilter?.kind === filterKind &&
               "value" in activeFilter &&
               normalizeFilterValue(activeFilter.value) ===
-                normalizeFilterValue(item.label);
+              normalizeFilterValue(item.label);
 
             return (
               <li key={item.label}>
@@ -145,11 +146,10 @@ function CountList({
                       isActive ? null : { kind: filterKind, value: item.label },
                     )
                   }
-                  className={`flex w-full justify-between gap-3 rounded-md px-2 py-1 text-left transition-colors ${
-                    isActive
+                  className={`flex w-full justify-between gap-3 rounded-md px-2 py-1 text-left transition-colors ${isActive
                       ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
                       : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
-                  }`}
+                    }`}
                 >
                   <span className="text-zinc-600 dark:text-zinc-300">{item.label}</span>
                   <span className="font-medium">{item.count}</span>
@@ -248,13 +248,14 @@ export function DashboardFilteredTable({
           <span>
             Table filter: <strong>{getFilterLabel(activeFilter)}</strong>
           </span>
-          <button
+          <Button
             type="button"
+            variant="link"
+            className="h-auto px-0 py-0"
             onClick={() => setActiveFilter(null)}
-            className="underline underline-offset-4"
           >
             Clear filter
-          </button>
+          </Button>
         </section>
       ) : null}
 

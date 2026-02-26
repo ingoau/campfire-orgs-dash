@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
 export function SignInButton() {
@@ -25,14 +26,13 @@ export function SignInButton() {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <button
+      <Button
         type="button"
         onClick={handleSignIn}
         disabled={loading}
-        className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900"
       >
         {loading ? "Redirecting..." : "Sign in with Hack Club"}
-      </button>
+      </Button>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
     </div>
   );

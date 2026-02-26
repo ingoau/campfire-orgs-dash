@@ -7,6 +7,7 @@ import { type ParticipantRow } from "@/components/participants-table";
 import { ModeToggle } from "@/components/mode-toggle";
 import { RawDataToggle } from "@/components/raw-data-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
+import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import {
   fetchParticipantsResponse,
@@ -111,12 +112,9 @@ export default async function DashboardPage() {
         </div>
         <div className="flex items-center gap-2">
           <ModeToggle />
-          <Link
-            href="/dashboard"
-            className="rounded-md border px-3 py-1.5 text-sm"
-          >
-            Refresh
-          </Link>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/dashboard">Refresh</Link>
+          </Button>
           <SignOutButton />
         </div>
       </header>
