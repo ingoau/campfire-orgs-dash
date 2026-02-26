@@ -2,10 +2,8 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import {
-  ParticipantsTable,
-  type ParticipantRow,
-} from "@/components/participants-table";
+import { DashboardFilteredTable } from "@/components/dashboard-filtered-table";
+import { type ParticipantRow } from "@/components/participants-table";
 import { ModeToggle } from "@/components/mode-toggle";
 import { RawDataToggle } from "@/components/raw-data-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -13,51 +11,9 @@ import { auth } from "@/lib/auth";
 import {
   fetchParticipantsResponse,
   type Event,
-  type Participant,
   type ParticipantsResponse,
 } from "@/lib/cockpit";
-import {
-  buildParticipantSummaries,
-  getActiveParticipants,
-  type KeyedCount,
-} from "@/lib/participants";
-
-function SummaryCard({ label, value }: { label: string; value: number }) {
-  return (
-    <article className="rounded-lg border p-4">
-      <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold">{value}</p>
-    </article>
-  );
-}
-
-function CountList({
-  title,
-  values,
-  emptyLabel,
-}: {
-  title: string;
-  values: KeyedCount[];
-  emptyLabel: string;
-}) {
-  return (
-    <section className="rounded-lg border p-4">
-      <h2 className="text-base font-semibold">{title}</h2>
-      {values.length > 0 ? (
-        <ul className="mt-3 space-y-2 text-sm">
-          {values.map((item) => (
-            <li key={item.label} className="flex justify-between gap-3">
-              <span className="text-zinc-600 dark:text-zinc-300">{item.label}</span>
-              <span className="font-medium">{item.count}</span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 text-sm text-zinc-500">{emptyLabel}</p>
-      )}
-    </section>
-  );
-}
+import { buildParticipantSummaries, getActiveParticipants } from "@/lib/participants";
 
 const EMPTY_EVENT: Event = {
   id: "",
@@ -120,7 +76,7 @@ export default async function DashboardPage() {
         : "Failed to load participants from Cockpit.";
   }
 
-  const allParticipants: Participant[] = apiResponse.participants;
+  const allParticipants = apiResponse.participants;
   const event = apiResponse.event;
   const participants = getActiveParticipants(allParticipants);
   const summaries = buildParticipantSummaries(allParticipants);
@@ -171,40 +127,12 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard label="Total participants" value={summaries.totalAll} />
-        <SummaryCard label="Checked in" value={summaries.totalCheckedIn} />
-        <SummaryCard
-          label="Estimated attendees"
-          value={event.estimatedAttendeesCount}
-        />
-        <SummaryCard label="Signup %" value={Math.round(event.percentSignup)} />
-      </section>
-
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
-        <CountList
-          title="Dietary Restrictions"
-          values={summaries.dietaryRestrictions}
-          emptyLabel="No dietary restrictions provided."
-        />
-        <CountList
-          title="Shirt Sizes"
-          values={summaries.shirtSizes}
-          emptyLabel="No shirt sizes provided."
-        />
-        <CountList
-          title="Pronouns"
-          values={summaries.pronouns}
-          emptyLabel="No pronouns provided."
-        />
-        <CountList
-          title="Additional Accommodations"
-          values={summaries.accommodations}
-          emptyLabel="No accommodations provided."
-        />
-      </section>
-
-      <ParticipantsTable data={rows} />
+      <DashboardFilteredTable
+        summaries={summaries}
+        estimatedAttendeesCount={event.estimatedAttendeesCount}
+        percentSignup={event.percentSignup}
+        rows={rows}
+      />
       <RawDataToggle data={apiResponse.raw} />
     </main>
   );
